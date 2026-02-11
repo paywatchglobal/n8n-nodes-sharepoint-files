@@ -2,7 +2,7 @@
 name: release
 description: Create a new tagged GitHub release using gh CLI with auto-generated release notes
 disable-model-invocation: true
-allowed-tools: Bash(gh *), Bash(git *)
+allowed-tools: Bash(gh *), Bash(git *), Read
 argument-hint: [branch-name]
 ---
 
@@ -12,17 +12,27 @@ Create a new tagged GitHub release with auto-generated release notes summarizing
 
 ## Instructions
 
-### Step 1: Determine the release tag
+### Step 1: Determine the versioning scheme
 
-1. Get today's date in `YYYYMMDD` format (use the system date).
-2. Fetch the most recent release tag using:
-   ```bash
-   gh release list --limit 10 --json tagName,publishedAt,isDraft --order desc
-   ```
-3. Determine the next release number:
-   - If the most recent release tag starts with `v<today's date>`, extract the `.NN` suffix and increment it by 1 (e.g., `v20260211.03` → `v20260211.04`).
-   - If no release exists for today, the new tag is `v<today's date>.01`.
-   - Always zero-pad the number to 2 digits (`.01`, `.02`, ... `.09`, `.10`, `.11`, etc.).
+1. Check if a `package.json` exists in the repo root.
+2. **If `package.json` exists** (npm package): use **semver** from `package.json`:
+   - Read the `version` field from `package.json`.
+   - The release tag is `v<version>` (e.g., `v0.1.0`).
+   - Fetch existing releases to check if this tag already exists:
+     ```bash
+     gh release list --limit 10 --json tagName --order desc
+     ```
+   - If the tag already exists, inform the user that the version in `package.json` has already been released and they need to bump the version first. **Stop and do not proceed.**
+3. **If no `package.json` exists**: use **calver**:
+   - Get today's date in `YYYYMMDD` format (use the system date).
+   - Fetch the most recent release tag using:
+     ```bash
+     gh release list --limit 10 --json tagName,publishedAt,isDraft --order desc
+     ```
+   - Determine the next release number:
+     - If the most recent release tag starts with `v<today's date>`, extract the `.NN` suffix and increment it by 1 (e.g., `v20260211.03` → `v20260211.04`).
+     - If no release exists for today, the new tag is `v<today's date>.01`.
+     - Always zero-pad the number to 2 digits (`.01`, `.02`, ... `.09`, `.10`, `.11`, etc.).
 
 ### Step 2: Determine the target branch
 
@@ -82,8 +92,8 @@ Create release notes in this format:
 ### Step 6: Create the release title
 
 The title should include the tag name followed by a colon and a short, descriptive phrase summarizing the release. For example:
-- "v20260211.01: Add audit logging and telemetry improvements"
-- "v20260204.02: Fix transaction listing and provider error handling"
+- Semver: "v0.2.0: Add audit logging and telemetry improvements"
+- Calver: "v20260211.01: Fix transaction listing and provider error handling"
 
 ### Step 7: Show the user what will be created
 
