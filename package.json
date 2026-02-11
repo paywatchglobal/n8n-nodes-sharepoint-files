@@ -1,6 +1,6 @@
 {
     "name": "@paywatchglobal/n8n-nodes-sharepoint-files",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "n8n community node to manage files and folders in SharePoint sites via Microsoft Graph API",
     "license": "MIT",
     "homepage": "",

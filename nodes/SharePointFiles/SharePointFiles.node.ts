@@ -255,7 +255,7 @@ export class SharePointFiles implements INodeType {
 					// eslint-disable-next-line @n8n/community-nodes/no-deprecated-workflow-functions
 					await this.helpers.request({
 						method: 'GET',
-						uri: 'https://graph.microsoft.com/v1.0/organization',
+						uri: 'https://graph.microsoft.com/v1.0/sites/root',
 						headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
 					});
 
