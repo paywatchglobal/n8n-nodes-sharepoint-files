@@ -1,0 +1,14 @@
+{
+	"node": "n8n-nodes-base.sharePointFiles",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Files", "Productivity"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://learn.microsoft.com/en-us/graph/api/resources/driveitem"
+			}
+		]
+	},
+	"alias": ["Microsoft", "SharePoint", "OneDrive", "365", "Files", "Documents"]
+}
